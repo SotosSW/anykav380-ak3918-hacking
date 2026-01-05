@@ -21,6 +21,17 @@ For the vertical motor:
 ```
 Some minor adjustments to the driver have been made, mostly cleaning up a few parts of code and addidng a few extra debug messages which I might remove in future commits.
 
+## UART - Serial pins - Hidden beyond recognition
+.. I really don't want to remember how much time I spent tracking those but here you go, hope it saves someone some time in the future.
+
+Main circuit board:
+![circuit_board](./Images/1696685415925.jpg)
+
+Serial pins:
+![uart](./Images/1696868639286.jpg)
+![uart](./Images/1696934602947.jpg)
+
+
 ## Everything else
 Years later I still haven't sit down to document everything as I wanted, so I apologize to everyone that might have been expecting insight from my documentation. Few things might be added in the future (or not).
 
