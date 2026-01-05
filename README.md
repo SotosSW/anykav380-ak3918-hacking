@@ -5,10 +5,10 @@ As I never so far actually found the time to work on this repository, I revisite
 Everything I'm working on right now is based on two principles: 1) Being off-cloud and 2) Work idiot-proof with Home Assistant
 
 ## PTZ Daemon
-So, first I wanted to make enhancements to the beautiful program for PTZ control made by @kuhnchris. I noticed that whenever I compiled the program myself and tried to run it on my camera, on the initialization stage the motor turned to the left and then I got a "floating point exception. core dumped" exception
-Initially I noticed the substancially smaller size of my executable so I realized that the custom ptz-daemon compiled exec provided by @warren-bank was compiled with static libraries. Fast forward I discover that the driver provided by the SDK was not compatible with my hardware and the driver included by @kuhnchris was an older version and was missing a few functions such as a command to stop the PTZ rotation. After a few hours of trial and error reverse engineering I managed to get the SDK's updated version to work so I upload it here for the time being for anyone facing the exact same issues.
+So, first I wanted to make enhancements to the beautiful program for PTZ control made by [_@kuhnchris_](https://github.com/kuhnchris/IOT-ANYKA-PTZdaemon/). I noticed that whenever I compiled the program myself and tried to run it on my camera, on the initialization stage the motor turned to the left and then I got a "floating point exception. core dumped" exception
+Initially I noticed the substancially smaller size of my executable so I realized that the custom ptz-daemon compiled exec provided by [_@warren-bank_](https://github.com/warren-bank/mirror-firmware-lightbulb-camera-Anyka-ak3918-by-Gergely-Palfi) was compiled with static libraries. Fast forward I discover that the driver provided by the SDK was not compatible with my hardware and the driver included by kuhnchris was an older version and was missing a few functions such as a command to stop the PTZ rotation. After a few hours of trial and error reverse engineering I managed to get the SDK's updated version to work so I upload it here for the time being for anyone facing the exact same issues.
 
-The issue was with the default values for the total steps and cycle steps in the ak_motor struct in ak_drv_ptz.c The final adjusted values are:
+The issue was with the default values for the total steps and cycle steps in the **ak_motor** struct in `ak_drv_ptz.c` The final adjusted values are:
 For the horizontal motor:
 ```
 .fulldst_step = 4209,
