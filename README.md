@@ -5,6 +5,15 @@ As I never so far actually found the time to work on this repository, I revisite
 Everything I'm working on right now is based on two principles: 1) Being off-cloud and 2) Work idiot-proof with Home Assistant
 
 ## PTZ Daemon
+A new improved version of the PTZ Daemon by [_MuhammedKalkan_](https://github.com/MuhammedKalkan/Anyka-Camera-Firmware/) (originally by [_@kuhnchris_](https://github.com/kuhnchris/IOT-ANYKA-PTZdaemon/) ) is provided in this repository. Read more in the README.md in the `ptz_daemon` folder. Feautres include and are not limited to:
+
+```
+-MQTT client integration. Handle PTZ using a secured MQTT connection.
+-Home Assistant status integration. Have your device discovered by HA and check its status
+-Support for the newer libplat_drv driver provided by anycloud39ev300 SDK. More functions and available source code.
+```
+
+## PTZ Daemon - Notes
 So, first I wanted to make enhancements to the beautiful program for PTZ control made by [_@kuhnchris_](https://github.com/kuhnchris/IOT-ANYKA-PTZdaemon/). I noticed that whenever I compiled the program myself and tried to run it on my camera, on the initialization stage the motor turned to the left and then I got a "floating point exception. core dumped" exception
 Initially I noticed the substancially smaller size of my executable so I realized that the custom ptz-daemon compiled exec provided by [_@warren-bank_](https://github.com/warren-bank/mirror-firmware-lightbulb-camera-Anyka-ak3918-by-Gergely-Palfi) was compiled with static libraries. Fast forward I discover that the driver provided by the SDK was not compatible with my hardware and the driver included by kuhnchris was an older version and was missing a few functions such as a command to stop the PTZ rotation. After a few hours of trial and error reverse engineering I managed to get the SDK's updated version to work so I upload it here for the time being for anyone facing the exact same issues.
 
@@ -19,7 +28,9 @@ For the vertical motor:
 .fulldst_step = 2161,
 .cycle_step = 2161,
 ```
-Some minor adjustments to the driver have been made, mostly cleaning up a few parts of code and addidng a few extra debug messages which I might remove in future commits.
+Some minor adjustments to the driver have been made, mostly cleaning up a few parts of code, fixing some malfunctioning functions and addidng a few extra debug messages which I might remove in future commits.
+
+
 
 ## UART - Serial pins - Hidden beyond recognition
 .. I really don't want to remember how much time I spent tracking those but here you go, hope it saves someone some time in the future.

@@ -717,10 +717,14 @@ static int check_dg (struct ak_motor *motor, int degree)
     int set_step = degree2step (motor, degree);
     int cur_step = __get_motor_step (motor, set_step); ///< 获取当前位置。
     ak_print_normal_ex("Set step is: %d Current motor step is: %d\r\n", set_step, cur_step);
-    int step = set_step - cur_step;
+    int step;
 
     /// 最大最小值限定。
-    set_step = set_step >= 0 ? set_step : 0;
+    if (motor->fd == get_motor_fd(PTZ_DEV_H)){
+    	set_step = set_step > -motor->fulldst_step ? set_step : -motor->fulldst_step + 1;
+    }else{
+    	set_step = set_step >= 0 ? set_step : 0;
+    }
     set_step = set_step < motor->fulldst_step ? set_step : motor->fulldst_step - 1;
 
     /// 算出步数偏差。
@@ -742,6 +746,7 @@ static int check_dg (struct ak_motor *motor, int degree)
 	}
 
 	motor->cmd_data.dg = dg;
+	//_TEST_ak_read_values();
 
 	return 0;
 }
@@ -937,7 +942,7 @@ int ak_drv_ptz_turn(enum ptz_turn_direction direct, int degree)
 	}
 	if((direct < PTZ_TURN_LEFT) || (direct > PTZ_TURN_DOWN)){
 		set_error_no(ERROR_TYPE_INVALID_ARG);
-		ak_print_error_ex("para err.\n");
+		ak_print_error_ex("para err.%d\n",direct);
 		return -1;
 	}
 
@@ -1141,4 +1146,72 @@ int ak_drv_ptz_close(void)
 	}
 
 	return AK_SUCCESS;
+}
+
+int _TEST_ak_read_values() {
+
+	ak_print_normal_ex ("Starting IO test. Using horizontal motor\n");
+	int fd = get_motor_fd (PTZ_DEV_H);
+	struct motor_message Msg;
+
+	if (fd < 0) {
+		return -1;
+	}
+
+	/*ak_print_normal_ex ("Trying AK_MOTOR_SET_ANG_SPEED\n");
+	if (ioctl (fd, AK_MOTOR_SET_ANG_SPEED, &buff) != 0) {
+		ak_print_error_ex ("Error\n");
+	}
+	ak_print_normal_ex ("AK_MOTOR_SET_ANG_SPEED:%s\n", buff);
+	sleep(1);
+
+	ak_print_normal_ex ("Trying AK_MOTOR_GET_ANG_SPEED\n");
+	if (ioctl (fd, AK_MOTOR_GET_ANG_SPEED, &buff) != 0) {
+		ak_print_error_ex ("Error\n");
+	}
+	ak_print_normal_ex ("AK_MOTOR_GET_ANG_SPEED:%s\n", buff);
+	sleep(1);
+
+	ak_print_normal_ex ("Trying AK_MOTOR_TURN_CLKWISE\n");
+	if (ioctl (fd, AK_MOTOR_TURN_CLKWISE , &buff) != 0) {
+		ak_print_error_ex ("Error\n");
+	}
+	ak_print_normal_ex ("AK_MOTOR_TURN_CLKWISE:%s\n", buff);
+	sleep(1);
+
+	ak_print_normal_ex ("Trying AK_MOTOR_TURN_ANTICLKWISE\n");
+	if (ioctl (fd, AK_MOTOR_TURN_ANTICLKWISE , &buff) != 0) {
+		ak_print_error_ex ("Error\n");
+	}
+	ak_print_normal_ex ("AK_MOTOR_TURN_ANTICLKWISE:%s\n", buff);
+	sleep(1);
+
+	ak_print_normal_ex ("Trying AK_MOTOR_GET_HIT_STATUS\n");
+	if (ioctl (fd, AK_MOTOR_GET_HIT_STATUS, &buff) != 0) {
+		ak_print_error_ex ("Error\n");
+	}
+	ak_print_normal_ex ("AK_MOTOR_GET_HIT_STATUS:%s\n", buff);
+	sleep(1);
+
+	ak_print_normal_ex ("Trying AK_MOTOR_TURN_STOP\n");
+	if (ioctl (fd, AK_MOTOR_TURN_STOP, &buff) != 0) {
+		ak_print_error_ex ("Error\n");
+	}
+	ak_print_normal_ex ("AK_MOTOR_TURN_STOP:%s\n", buff);
+	sleep(1);*/
+	ak_print_normal_ex ("Trying MOTOR_GET_STATUS\n");
+	if (ioctl (fd, MOTOR_GET_STATUS, &Msg) != 0) {
+		ak_print_error_ex ("Error\n");
+	}
+	ak_print_normal_ex ("status:%d\n", Msg.status);
+	ak_print_normal_ex ("pos:%d\n", Msg.pos);
+	ak_print_normal_ex ("speed_step:%d\n", Msg.speed_step);
+	ak_print_normal_ex ("speed_angle:%d\n", Msg.speed_angle);
+	ak_print_normal_ex ("steps_one_circle:%d\n", Msg.steps_one_circle);
+	ak_print_normal_ex ("total_steps:%d\n", Msg.total_steps);
+	ak_print_normal_ex ("boundary_steps:%d\n", Msg.boundary_steps);
+	ak_print_normal_ex ("attach_timer:%d\n", Msg.attach_timer);
+	sleep(1);
+
+	return 0;
 }

@@ -3,6 +3,7 @@
 #include <string.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <sys/stat.h>
 #include "internal_error.h"
 #include "ak_common.h"
 #include "ak_cmd_exec.h"

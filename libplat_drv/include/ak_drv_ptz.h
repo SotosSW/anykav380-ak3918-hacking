@@ -168,4 +168,9 @@ int ak_drv_ptz_set_speed(enum ptz_device motor_no, int speed);
  */
 int ak_drv_ptz_close(void);
 
+/**
+ * driver tests
+ */
+int _TEST_ak_read_values(void);
+
 #endif

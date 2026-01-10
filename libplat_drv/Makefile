@@ -14,7 +14,7 @@ INC_DIR := $(WORKDIR)/include
 export LIB_DIR INC_DIR
 
 # compile toolchain
-CROSS_COMPILE ?= arm-anykav200-linux-uclibcgnueabi-
+CROSS_COMPILE ?= /opt/arm-anykav200-crosstool/usr/bin/arm-anykav200-linux-uclibcgnueabi-
 
 DEBUG := n
 CC := $(CROSS_COMPILE)gcc
